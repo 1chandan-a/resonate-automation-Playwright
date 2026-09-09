@@ -27,7 +27,8 @@ class SurveyPage {
         Logger.info(`Opening survey: ${url}`);
         await this.page.goto(url, { waitUntil: 'domcontentloaded' });
         Logger.info(`Current URL: ${this.page.url()}`);
-
+        await this.page.waitForLoadState('networkidle');
+        await expect(this.acceptCookiesLink).toBeVisible({ timeout: 10000 });
         if (await this.acceptCookiesLink.isVisible()) {
             Logger.info('Accepting cookie settings');
             await this.page.evaluate(() => {
@@ -37,7 +38,7 @@ class SurveyPage {
             });
         }
 
-        await expect(this.surveyJSLogo).toBeVisible();
+        await expect(this.surveyJSLogo).toBeVisible({ timeout: 15000 });
         await expect(this.satisfactionOptions.first()).toBeVisible({ timeout: 15000 });
         Logger.info('Survey loaded successfully');
     }
@@ -64,16 +65,16 @@ class SurveyPage {
     }
 
     async selectRecommendation(recommendation) {
-        const option = this.page
-            .locator(`//input[@value="${recommendation}"]/following-sibling::span[contains(@class, "sd-checkbox__decorator")]`)
-        await option.check();
-        await expect(option).toBeChecked();
+        const option = this.page.locator(`//input[@value="${recommendation}"]/following-sibling::span[contains(@class, "sd-checkbox__decorator")]`)
+
+        await option.click({ force: true });
+        await expect(option).toBeChecked({ timeout: 5000 });
 
     }
 
     async enterFeedback(feedback) {
         await this.feedbackField.scrollIntoViewIfNeeded();
-        await expect(this.feedbackField).toBeVisible();
+        await expect(this.feedbackField).toBeVisible({ timeout: 5000 });
         await this.feedbackField.click();
         await this.feedbackField.fill(feedback);
         await expect(this.feedbackField).toHaveValue(feedback);
@@ -85,7 +86,7 @@ class SurveyPage {
                 return;
             }
 
-            await expect(this.nextButton).toBeVisible();
+            await expect(this.nextButton).toBeVisible({ timeout: 5000 });
             await this.nextButton.click({ force: true });
         }
 

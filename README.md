@@ -100,7 +100,3 @@ Relevant documentation is stored in:
 ## Notes
 
 This repository demonstrates UI automation for a public survey form. Some broader enterprise scenarios such as SFTP ingestion, invitation delivery, suppression logic, analytics validation, and backend persistence checks are documented as design/integration cases and require a controlled environment or API access.
-
-## License
-
-ISC
